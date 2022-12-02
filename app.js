@@ -10,12 +10,11 @@ const app = express();
 // *** Body Parser ***
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// *** Staticke datoteke su datoteke koje klijenti preuzimaju sa servera onako kako jesu. Sa ovim "public", ce svi staticki podaci biti javni. ***
-// ** Na osnovu ovog "public" sam dobio sliku sa login in ili sing up **
+
 app.use(express.static("public"));
 // app.use("/public", express.static(path.join(__dirname, "public")));
 
-// *** Pracenje Html fajla ***
+
 app.get("/", function (req, res) {
     res.sendFile(__dirname + "/signup.html");
 });
@@ -40,10 +39,10 @@ app.post("/", function (req, res) {
             }
         ]
     }
-    // ** Sa jsonData stringify unsoimo podatke u https i konstruisemo zahtijev "data", gde pravimo objekat i dodajemo vrednost **
+    
     const jsonData = JSON.stringify(data);
 
-    // *** Unosimo url sa sajta gde ga prepravljamo nakon https://us21. jer kada kopiramo API id, zadnja 4 slova i broja kopiramo i nakon kose crte unosimo ***
+    
     const url = "https://us21.api.mailchimp.com/3.0/lists/29cb3d2c49";
 
     const options = {
@@ -51,7 +50,7 @@ app.post("/", function (req, res) {
         auth: "text or bojan1:f3bed6471180b00e33e9ed9b948e159f-us21"
     };
 
-    // *** Saljemo nase zahtijeve u mailchimp website gde mozemo videti ko se pokusao sing up ili sing in ***
+    
     const request = https.request(url, options, function (response) {
 
         if (response.statusCode === 200) {
@@ -69,8 +68,7 @@ app.post("/", function (req, res) {
 
 
 });
-// ** Koristimo ovo app.post i res.redirect('/') da bismo vratili back button na pocetnu stranicu ** 
-// u html signup.html moramo uneti kod action="/failure". takozvano "Home-Route"
+
 app.post("/failure", function (req, res) {
     res.redirect("/")
 })
